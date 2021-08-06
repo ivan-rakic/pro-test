@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prodyna Test</title>
+
+    <!-- OG Properties -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Prodyna Test">
+    <meta property="og:url" content="https://www.domain.com">
+    <meta property="og:image" content="https://www.domain.com/og-image.png">
+    <meta property="og:description" content="Simple message board application." />
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="app test" />
+
+    <!-- Scripts and Stylesheets -->
+    <link rel="stylesheet" href="scss/main.scss" />
+    <script defer src="script.js"></script>
+</head>
+
+
+<body>
+    <header class="header">
+        <img src="assets/logo.svg" alt="prodyna logo">
+    </header>
+    <main class="app">
+        <!-- START - add new post -->
+        <div class="newPost__section">
+            <input class="newPost__section--title" required type="text" placeholder="Title">
+            <input class="newPost__section--message" required type="text" placeholder="Message">
+            <button class="newPost__section--submit">Submit</button>
+        </div>
+
+        <!-- START - search input field -->
+        <div class="post__search">
+            <input class="post__search--input" type="text" placeholder="search">
+        </div>
+
+        <!-- START - MAIN list of all results -->
+        <div class="post--holder">
+            <div class="lds-dual-ring"></div>
+            <div class="posts__list">
+                <!-- Template for message list 
+                    <div class="posts__list--item">
+                <p class="posts__list--title">this will be title</p>
+                <div class="posts__list--message hidden">this will be body message</div>
+                <span class="posts__list--delete" title="Remove">✖</span>
+            </div>
+            -->
+            </div>
+        </div>
+    </main>
+    </div>
+</body>
+
+</html>

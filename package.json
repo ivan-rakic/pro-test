@@ -1,0 +1,33 @@
+{
+  "name": "prodynatest",
+  "version": "1.0.0",
+  "description": "Demo project for testing Async operations on the provided fake server env.",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivan-rakic/pro-test.git"
+  },
+  "keywords": [
+    "test",
+    "async",
+    "demo"
+  ],
+  "author": "Ivan Rakic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivan-rakic/pro-test/issues"
+  },
+  "homepage": "https://github.com/ivan-rakic/pro-test#readme",
+  "dependencies": {
+    "core-js": "^3.16.0",
+    "regenerator-runtime": "^0.13.9"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.0-beta.2",
+    "parcel": "^2.0.0-beta.2"
+  }
+}
