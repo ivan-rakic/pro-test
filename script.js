@@ -16,7 +16,7 @@ const postsList = document.querySelector('.posts__list');
 const newTitle = document.querySelector('.newPost__section--title');
 const newMessage = document.querySelector('.newPost__section--message');
 const submitBtn = document.querySelector('.newPost__section--submit');
-const serachInput = document.querySelector('.post__search--input');
+const searchInput = document.querySelector('.post__search--input');
 
 ////////////////////////////////////////////////////////////////////
 // ----- MISC
@@ -47,6 +47,7 @@ const getData = async function () {
 }
 
 // ----- POSTING NEW DATA
+// userID, title, message are all recieved from API object
 const submitData = async function (userId, title, message) {
     await fetch(url, {
         method: 'POST',
@@ -65,10 +66,11 @@ const submitData = async function (userId, title, message) {
     loadSpin.style.display = "none";
     newTitle.value = '';
     newMessage.value = '';
-    serachInput.value = '';
+    searchInput.value = '';
 }
 
 //  ----- DELETING DATA and REMOVING IT FROM HTML LIST
+// ID is recieved to compare ID added to div with ID from API
 const deleteData = async function (id) {
     try {
         await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
@@ -88,24 +90,9 @@ const deleteData = async function (id) {
     }
 }
 
-// ---- DELETE BUTTON CLICK
-const deleteClick = async function () {
-    // select element target for delete button
-    const msgDivs = document.querySelectorAll('.posts__list--delete');
-    msgDivs.forEach(el => el.addEventListener('click', event => {
-        event.stopPropagation();
-        // Ask user if suer to proceed with delete
-        if (confirm('Are you sure?')) {
-            const parent = el.closest('.posts__list--item');
-            deleteData(parent.id);
-        }
-    }))
-    messageToggle();
-};
-
 ////////////////////////////////////////////////////////////////////
 // ----- RENDERING HTML MESSAGE LIST WITH NEW DATA
-
+// data recieved is data from API
 const renderData = function (data) {
     // clear all existing html 
     postsList.innerHTML = '';
@@ -120,8 +107,17 @@ const renderData = function (data) {
         `;
         postsList.insertAdjacentHTML('afterbegin', html);
     })
-    // apply delete click event on new list
-    deleteClick();
+    // select element target for delete button
+    const msgDivs = document.querySelectorAll('.posts__list--delete');
+    msgDivs.forEach(el => el.addEventListener('click', event => {
+        event.stopPropagation();
+        // Ask user if suer to proceed with delete
+        if (confirm('Are you sure?')) {
+            const parent = el.closest('.posts__list--item');
+            deleteData(parent.id);
+        }
+    }))
+    messageToggle();
 };
 
 // ---- DISPLAYING NEW POST
@@ -167,13 +163,12 @@ const renderError = function (msg) {
     }, 5000);
 }
 
-
 ////////////////////////////////////////////////////////////////
 /// ---- APP 
 
 async function App() {
     // Clear all input fields at start of new app
-    serachInput.value = '';
+    searchInput.value = '';
     newTitle.value = '';
     newMessage.value = '';
 
@@ -181,15 +176,10 @@ async function App() {
     dataList = await getData();
     renderData(dataList);
 
-    // Select all async created HTML and apply Toggle and Delete Event selectors
-    messageToggle();
-    deleteClick();
-
     // Submit data event listener for submit button click
     submitBtn.addEventListener('click', async function (e) {
         // prevent page reload
         e.preventDefault();
-
         try {
             // select and take input values for title and message body
             const title = newTitle.value;
@@ -202,27 +192,22 @@ async function App() {
             }
             // submit data function with random id number
             await submitData(number, title, message);
-
-            // Since new table is async generated apply msg toggle and delete event again
-            messageToggle();
-            deleteClick();
         }
         catch (error) {
             renderError(error);
         }
     });
-
     // change data event listener for search input
-    serachInput.addEventListener('input', function () {
-        const searchValue = serachInput.value;
+    searchInput.addEventListener('input', function () {
+        const searchValue = searchInput.value;
         // if search value is not empty then proceed to render new array
         if (searchValue != '') {
             const searchArray = dataList.filter(val => val.title.includes(searchValue));
             renderData(searchArray);
-            messageToggle();
-            deleteClick();
         }
     })
+    // Select all async created HTML and apply Toggle and Delete Event selectors
+    messageToggle();
 }
 App();
 
