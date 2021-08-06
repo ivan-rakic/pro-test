@@ -23,6 +23,7 @@ const searchInput = document.querySelector('.post__search--input');
 
 let dataList;
 let number = Math.trunc(Math.random() * 20) + 1;
+let addedList = [];
 
 
 ////////////////////////////////////////////////////////////////////
@@ -107,6 +108,7 @@ const renderData = function (data) {
         `;
         postsList.insertAdjacentHTML('afterbegin', html);
     })
+
     // select element target for delete button
     const msgDivs = document.querySelectorAll('.posts__list--delete');
     msgDivs.forEach(el => el.addEventListener('click', event => {
@@ -117,6 +119,7 @@ const renderData = function (data) {
             deleteData(parent.id);
         }
     }))
+
     messageToggle();
 };
 
@@ -128,9 +131,18 @@ const insertNewPost = async function (json) {
     // check if title and message are not empty inputs
     if (json.title != '' && json.message != '') {
         try {
+            // gets POST response and adds it to datalist
             const res = await getData();
-            res.push(json);
             [...dataList] = res;
+
+            // will make sure that post id is at least lenght of actual list + lenght of list of added posts + 1, for no conflict
+            json.id = res.length + addedList.length + 1;
+            addedList.push(json);
+
+            // will push addedList objectts to dataList
+            for (let i = 0; i < addedList.length; i++) {
+                dataList.push(addedList[i]);
+            }
             renderData(dataList);
         }
         catch (error) {
@@ -172,14 +184,15 @@ async function App() {
     newTitle.value = '';
     newMessage.value = '';
 
+    // Select all async created HTML and apply Toggle and Delete Event selectors
+    messageToggle();
+
     // load API data and Render it to DOM
     dataList = await getData();
     renderData(dataList);
 
     // Submit data event listener for submit button click
     submitBtn.addEventListener('click', async function (e) {
-        // prevent page reload
-        e.preventDefault();
         try {
             // select and take input values for title and message body
             const title = newTitle.value;
@@ -198,16 +211,16 @@ async function App() {
         }
     });
     // change data event listener for search input
-    searchInput.addEventListener('input', function () {
-        const searchValue = searchInput.value;
-        // if search value is not empty then proceed to render new array
-        if (searchValue != '') {
+    searchInput.addEventListener('keyup', function () {
+        // ~200ms is average human typing speed
+        setTimeout(() => {
+            const searchValue = searchInput.value;
             const searchArray = dataList.filter(val => val.title.includes(searchValue));
             renderData(searchArray);
-        }
+
+        }, 200);
     })
-    // Select all async created HTML and apply Toggle and Delete Event selectors
-    messageToggle();
+
 }
 App();
 
